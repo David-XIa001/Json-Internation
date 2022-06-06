@@ -80,28 +80,48 @@ export default {
       document.execCommand("copy");
       document.getElementById("cp_hgz_input").remove();
     },
+    isJSON(str) {
+      try {
+        const object = JSON.parse(str);
+        if (object && typeof object === "object") {
+          console.log(object);
+          return true;
+        } else {
+          return false;
+        }
+      } catch (e) {
+        console.log("e =", e);
+      }
+    },
     handle() {
-      let jsonObj = JSON.parse(this.info);
-      this.flat(jsonObj)
-      let appid = "20220530001234142"; //自己申请
-      let key = "tunwKhOriVfTiSaAtH9n"; //自己申请
-      let salt = new Date().getTime();
-      let query = this.str.substr(0, this.str.length - 2);
-      let str1 = appid + query + salt + key;
-      let params = {
-        q: query,
-        appid: appid,
-        salt: salt,
-        from: "zh",
-        to: "en",
-        sign: md5(str1),
-      };
-      transtoEn(params).then((res) => {
-        let transResultStr = res.trans_result[0].dst;
-        this.transResult = transResultStr.split(";;");
-        let result = this.flat1(jsonObj);
-        this.result = JSON.stringify(result, null, "\t");
-      });
+      if (this.info.length == 0) {
+        return;
+      }
+      if (this.isJSON(this.info)) {
+        let jsonObj = JSON.parse(this.info);
+        this.flat(jsonObj);
+        let appid = "20220530001234142"; //自己申请
+        let key = "tunwKhOriVfTiSaAtH9n"; //自己申请
+        let salt = new Date().getTime();
+        let query = this.str.substr(0, this.str.length - 2);
+        let str1 = appid + query + salt + key;
+        let params = {
+          q: query,
+          appid: appid,
+          salt: salt,
+          from: "zh",
+          to: "en",
+          sign: md5(str1),
+        };
+        transtoEn(params).then((res) => {
+          let transResultStr = res.trans_result[0].dst;
+          this.transResult = transResultStr.split(";;");
+          let result = this.flat1(jsonObj);
+          this.result = JSON.stringify(result, null, "\t");
+        });
+      }else{
+        alert("请输入正确的JSON格式内容!")
+      }
     },
   },
 };
@@ -286,5 +306,8 @@ button {
   height: 30px;
   background: #128bf7;
   margin: 20px;
+}
+button:active{
+  background-color: #125af7;
 }
 </style>
