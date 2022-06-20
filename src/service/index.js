@@ -9,7 +9,7 @@
 // }
 import jsonp from "jsonp";
 const Qs = require("qs");
-const ajaxUrl = "http://api.fanyi.baidu.com/api/trans/vip/translate?";
+const ajaxUrl = "https://api.fanyi.baidu.com/api/trans/vip/translate?";
 export function transtoEn(params) {
   return new Promise((resolve, reject) => {
     jsonp(ajaxUrl + Qs.stringify(params), null, (err, data) => {
