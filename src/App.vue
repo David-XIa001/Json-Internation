@@ -84,7 +84,6 @@ export default {
       try {
         const object = JSON.parse(str);
         if (object && typeof object === "object") {
-          console.log(object);
           return true;
         } else {
           return false;
@@ -99,6 +98,8 @@ export default {
       }
       if (this.isJSON(this.info)) {
         let jsonObj = JSON.parse(this.info);
+        this.str = ''
+        this.index = 0
         this.flat(jsonObj);
         let appid = "20220530001234142"; //自己申请
         let key = "tunwKhOriVfTiSaAtH9n"; //自己申请
@@ -116,8 +117,10 @@ export default {
         transtoEn(params).then((res) => {
           let transResultStr = res.trans_result[0].dst;
           this.transResult = transResultStr.split(";;");
+          setTimeout(() => {
           let result = this.flat1(jsonObj);
           this.result = JSON.stringify(result, null, "\t");
+          }, 0);
         });
       }else{
         alert("请输入正确的JSON格式内容!")

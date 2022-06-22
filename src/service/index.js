@@ -25,6 +25,7 @@ export function transtoEn(params) {
 //  {
 //   "common": {
 //       "laSave": "保存",
-//       "standby": "待机界面自定义"
+//       "standby": "待机界面自定义",
+//       "standby1": "自定义",
 //   }
 // }
