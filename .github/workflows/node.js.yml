@@ -19,11 +19,11 @@ jobs:
     
       # 部署到 GitHub Pages
     - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@releases/v4
+      uses: JamesIves/github-pages-deploy-action@v4.3.3
       with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           repository-name: David-XIa001/JSON-internationalization
-          BRANCH: pages
+          BRANCH: dev
           FOLDER: dist
           CLEAN: true
 
