@@ -8,7 +8,7 @@
       </div>
       <div class="option">
         <button @click="handle">中翻英</button>
-        <button @click="cleanInfo">清空</button>
+        <button @click="cleanInfo">清空1</button>
         <button @click="copy">复制英文</button>
       </div>
 
