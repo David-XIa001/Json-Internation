@@ -13,8 +13,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@main
     - run: npm install && npm run build
-    
       # 部署到 GitHub Pages
+    steps:
     - name: Deploy
       #  进入生成的文件夹
       - run: cd docs/.vuepress/dist
