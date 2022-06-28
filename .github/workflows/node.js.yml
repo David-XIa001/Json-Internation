@@ -19,6 +19,7 @@ jobs:
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          repository-name: JSON-internationalization
           BRANCH: pages
           FOLDER: dist
           CLEAN: true
