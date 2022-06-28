@@ -20,7 +20,8 @@ jobs:
       with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BRANCH: pages
-          FOLDER: docs/.vuepress/dist
+          FOLDER: dist
+          CLEAN: true
 
     #   # 部署到 GitHub Pages
     # steps:
