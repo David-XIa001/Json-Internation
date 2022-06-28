@@ -20,14 +20,7 @@ jobs:
       with:
           token: ${{ secrets.ACCESS_TOKEN }}
           repository-name: David-XIa001/JSON-internationalization
-          BRANCH: dev
+          BRANCH: main
           FOLDER: dist
           CLEAN: true
-
-    #   # 部署到 GitHub Pages
-    # steps:
-    # - name: Deploy
-    #   #  进入生成的文件夹
-    #   - run: cd docs/.vuepress/dist
-    #   - run: git init && git add . && git commit -m "部署" && git push -f `https://David-XIa001:${ACCESS_TOKEN}@github.com/David-XIa001/JSON-internationalization.git` master:gh-pages
-    #   - run: cd ../ && rm -rf docs/.vuepress/dist
+          commit-message: "Deploy by source"
