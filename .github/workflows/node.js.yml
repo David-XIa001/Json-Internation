@@ -16,7 +16,7 @@ jobs:
     
       # 部署到 GitHub Pages
     - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@releases/v3
+      uses: JamesIves/github-pages-deploy-action@releases/v4
       with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           repository-name: JSON-internationalization
