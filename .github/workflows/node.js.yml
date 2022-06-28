@@ -15,9 +15,8 @@ jobs:
     - run: npm install && npm run build
     
       # 部署到 GitHub Pages
-#     - name: Deploy
-#       uses: JamesIves/github-pages-deploy-action@releases/v3
-#       with:
-#           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-#           BRANCH: main
-#           FOLDER: docs/.vuepress/dist
+    - name: Deploy
+      #  进入生成的文件夹
+      - run: cd docs/.vuepress/dist
+      - run: git init && git add . && git commit -m "部署" && git push -f `https://David-XIa001:${ACCESS_TOKEN}@github.com/David-XIa001/JSON-internationalization.git` master:gh-pages
+      - run: cd ../ && rm -rf docs/.vuepress/dist
