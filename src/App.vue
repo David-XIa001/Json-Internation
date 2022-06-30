@@ -80,6 +80,19 @@ export default {
       document.execCommand("copy");
       document.getElementById("cp_hgz_input").remove();
     },
+    isObj(str) {
+      try {
+        let obj = {};
+        eval("obj =" + str);
+        if (obj && typeof obj === "object") {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (e) {
+        console.log("e =", e);
+      }
+    },
     isJSON(str) {
       try {
         const object = JSON.parse(str);
@@ -92,38 +105,62 @@ export default {
         console.log("e =", e);
       }
     },
+    send(isObj) {
+      let jsonObj = {};
+      if (isObj) {
+        eval("jsonObj =" + this.info);
+      } else {
+        jsonObj = JSON.parse(this.info);
+      }
+      this.str = "";
+      this.index = 0;
+      this.flat(jsonObj);
+      let appid = "20220530001234142"; //自己申请
+      let key = "tunwKhOriVfTiSaAtH9n"; //自己申请
+      let salt = new Date().getTime();
+      let query = this.str.substr(0, this.str.length - 2);
+      let str1 = appid + query + salt + key;
+      let params = {
+        q: query,
+        appid: appid,
+        salt: salt,
+        from: "zh",
+        to: "en",
+        sign: md5(str1),
+      };
+      transtoEn(params).then((res) => {
+        let transResultStr = res.trans_result[0].dst;
+        this.transResult = transResultStr.split(";;");
+        setTimeout(() => {
+          let result = this.flat1(jsonObj);
+          if (isObj) {
+            this.result = JSON.stringify(result, null, "\t");
+          } else {
+            this.result = JSON.stringify(result, null, "\t");
+          }
+        }, 0);
+      });
+    },
+    // objToString(obj) {
+    //   var tabjson = [];
+    //   for (var p in obj) {
+    //     if (Object.prototype.hasOwnProperty.call(obj,p)) {
+    //       tabjson.push(  p + ":" + "'" +obj[p] + "'");
+    //     }
+    //   }
+    //   tabjson.push();
+    //   return "{" + tabjson.join(",") + "}";
+    // },
     handle() {
       if (this.info.length == 0) {
         return;
       }
       if (this.isJSON(this.info)) {
-        let jsonObj = JSON.parse(this.info);
-        this.str = ''
-        this.index = 0
-        this.flat(jsonObj);
-        let appid = "20220530001234142"; //自己申请
-        let key = "tunwKhOriVfTiSaAtH9n"; //自己申请
-        let salt = new Date().getTime();
-        let query = this.str.substr(0, this.str.length - 2);
-        let str1 = appid + query + salt + key;
-        let params = {
-          q: query,
-          appid: appid,
-          salt: salt,
-          from: "zh",
-          to: "en",
-          sign: md5(str1),
-        };
-        transtoEn(params).then((res) => {
-          let transResultStr = res.trans_result[0].dst;
-          this.transResult = transResultStr.split(";;");
-          setTimeout(() => {
-          let result = this.flat1(jsonObj);
-          this.result = JSON.stringify(result, null, "\t");
-          }, 0);
-        });
-      }else{
-        alert("请输入正确的JSON格式内容!")
+        this.send(false);
+      } else if (this.isObj(this.info)) {
+        this.send(true);
+      } else {
+        alert("请输入正确的JSON格式或者对象内容!");
       }
     },
   },
@@ -310,7 +347,7 @@ button {
   background: #128bf7;
   margin: 20px;
 }
-button:active{
+button:active {
   background-color: #125af7;
 }
 </style>
