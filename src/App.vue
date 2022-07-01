@@ -8,7 +8,7 @@
       </div>
       <div class="option">
         <button @click="handle">中翻英</button>
-        <button @click="cleanInfo">清空</button>
+        <button @click="cleanInfo">清空1</button>
         <button @click="copy">复制英文</button>
       </div>
 
@@ -141,16 +141,6 @@ export default {
         }, 0);
       });
     },
-    // objToString(obj) {
-    //   var tabjson = [];
-    //   for (var p in obj) {
-    //     if (Object.prototype.hasOwnProperty.call(obj,p)) {
-    //       tabjson.push(  p + ":" + "'" +obj[p] + "'");
-    //     }
-    //   }
-    //   tabjson.push();
-    //   return "{" + tabjson.join(",") + "}";
-    // },
     handle() {
       if (this.info.length == 0) {
         return;
@@ -163,6 +153,16 @@ export default {
         alert("请输入正确的JSON格式或者对象内容!");
       }
     },
+    // objToString(obj) {
+    //   var tabjson = [];
+    //   for (var p in obj) {
+    //     if (Object.prototype.hasOwnProperty.call(obj,p)) {
+    //       tabjson.push(  p + ":" + "'" +obj[p] + "'");
+    //     }
+    //   }
+    //   tabjson.push();
+    //   return "{" + tabjson.join(",") + "}";
+    // },
   },
 };
 </script>
