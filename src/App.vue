@@ -119,6 +119,10 @@ export default {
       let key = "tunwKhOriVfTiSaAtH9n"; //自己申请
       let salt = new Date().getTime();
       let query = this.str.substr(0, this.str.length - 2);
+      if (query.length > 2000) {
+        alert("翻译字符请限制在2000字以内!");
+        return;
+      }
       let str1 = appid + query + salt + key;
       let params = {
         q: query,
