@@ -1,24 +1,15 @@
-# my-app
+# JSON国际化小工具
 
-## Project setup
-```
-yarn install
-```
+## 解决问题
+帮助开发者快速翻译国际化语言包
+### 只需几部操作
+复制本地文件里面语言映射对象或者json对象
+粘贴到小工作中
+点击"翻译",即可获得你要一个个翻译的国际化语言
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+####
+支持json类型 √
+支持对象类型 √
+支持分片处理(不受限于2000字以内的翻译) √
+文件上传及下载
+多语言选择

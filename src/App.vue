@@ -5,16 +5,33 @@
       <div class="left">
         <p>中文</p>
         <textarea v-model="info"></textarea>
+        <div class="eg">
+          <p>示例:</p>
+          <p>{</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"device": {</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"device": "激活设备",</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"confirm": "密码确认",</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"active":"激活" }</p>
+          <p>}</p>
+        </div>
       </div>
       <div class="option">
         <button @click="handle">中翻英</button>
         <button @click="cleanInfo">清空</button>
         <button @click="copy">复制英文</button>
       </div>
-
       <div class="right">
         <p>英文</p>
         <textarea v-model="result"></textarea>
+        <div class="eg">
+          <p>结果:</p>
+          <p>{</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"device": {</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"device": "Activate the device",</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"confirm": "Password confirmation",</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"active":"Activate" }</p>
+          <p>}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -60,7 +77,7 @@ export default {
           res[k] = {};
           this.flat1(v, res[k]);
         } else {
-          res[k] = this.transResult[this.index].trim();
+          res[k] = this.transResult[this.index]?.trim();
           this.index++;
         }
       }
@@ -105,7 +122,7 @@ export default {
         console.log("e =", e);
       }
     },
-    send(isObj) {
+    async send(isObj) {
       let jsonObj = {};
       if (isObj) {
         eval("jsonObj =" + this.info);
@@ -115,14 +132,45 @@ export default {
       this.str = "";
       this.index = 0;
       this.flat(jsonObj);
+      // 要翻译的字符串
+      let query = this.str.substr(0, this.str.length);
+      let allResult = "";
+      const pice = 1000; //分片长度
+      // 超过长度进行分片处理
+      if (query.length > pice) {
+        let maxPice = Math.ceil(query.length / pice);
+        let start = 0;
+        for (let i = 1; i <= maxPice; i++) {
+          let end = pice * i;
+          while (query[end] != ";" && query[end - 1] != ";") {
+            end--;
+          }
+          allResult = allResult + (await this.sendApi(query.slice(start, end)));
+          start = end;
+        }
+        this.restore(allResult, jsonObj, isObj);
+      } else {
+        allResult = await this.sendApi(query);
+        this.restore(allResult, jsonObj, isObj);
+      }
+    },
+    // 还原成英文
+    restore(transResultStr, jsonObj, isObj) {
+      this.transResult = transResultStr.split(";;");
+      setTimeout(() => {
+        let result = this.flat1(jsonObj);
+        if (isObj) {
+          this.result = JSON.stringify(result, null, "\t");
+        } else {
+          this.result = JSON.stringify(result, null, "\t");
+        }
+      }, 0);
+    },
+    // 调api
+    sendApi(query) {
       let appid = "20220530001234142"; //自己申请
       let key = "tunwKhOriVfTiSaAtH9n"; //自己申请
       let salt = new Date().getTime();
-      let query = this.str.substr(0, this.str.length - 2);
-      if (query.length > 2000) {
-        alert("翻译字符请限制在2000字以内!");
-        return;
-      }
       let str1 = appid + query + salt + key;
       let params = {
         q: query,
@@ -132,17 +180,8 @@ export default {
         to: "en",
         sign: md5(str1),
       };
-      transtoEn(params).then((res) => {
-        let transResultStr = res.trans_result[0].dst;
-        this.transResult = transResultStr.split(";;");
-        setTimeout(() => {
-          let result = this.flat1(jsonObj);
-          if (isObj) {
-            this.result = JSON.stringify(result, null, "\t");
-          } else {
-            this.result = JSON.stringify(result, null, "\t");
-          }
-        }, 0);
+      return transtoEn(params).then((res) => {
+        return res.trans_result[0].dst;
       });
     },
     handle() {
@@ -353,5 +392,9 @@ button {
 }
 button:active {
   background-color: #125af7;
+}
+.eg{
+  margin-top: 10px;
+  text-align: left;
 }
 </style>
