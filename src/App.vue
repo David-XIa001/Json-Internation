@@ -16,19 +16,29 @@
         </div>
       </div>
       <div class="option">
-        <button @click="handle">中翻英</button>
+        <select class="langs" v-model="languages">
+          <option
+            v-for="item in langs"
+            :key="item.value"
+            :value="item.value"
+            :label="item.label"
+          />
+        </select>
+        <button @click="handle">翻译</button>
         <button @click="cleanInfo">清空</button>
-        <button @click="copy">复制英文</button>
+        <button @click="copy">复制</button>
       </div>
       <div class="right">
-        <p>英文</p>
+        <p>{{ currentLang() }}</p>
         <textarea v-model="result"></textarea>
         <div class="eg">
           <p>结果:</p>
           <p>{</p>
           <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"device": {</p>
           <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"device": "Activate the device",</p>
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"confirm": "Password confirmation",</p>
+          <p>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"confirm": "Password confirmation",
+          </p>
           <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"active":"Activate" }</p>
           <p>}</p>
         </div>
@@ -50,9 +60,23 @@ export default {
       str: "",
       transResult: [],
       index: 0,
+      languages: "en",
+      langs: [
+        { label: "英语", value: "en" },
+        { label: "日语", value: "jp" },
+        { label: "法语", value: "fra" },
+        { label: "韩语", value: "kor" },
+      ],
     };
   },
   methods: {
+    currentLang() {
+      for (let i = 0; i < this.langs.length; i++) {
+        if (this.langs[i].value == this.languages) {
+          return this.langs[i].label;
+        }
+      }
+    },
     // 对象拍平获取每一个要翻译的值
     flat(obj, key = "", res = {}, isArray = false) {
       for (let [k, v] of Object.entries(obj)) {
@@ -65,7 +89,7 @@ export default {
         } else {
           let tmp = isArray ? key + "[" + k + "]" : key + k;
           res[tmp] = v;
-          this.str = this.str + v + ";;";
+          this.str = this.str + v + "]]";
         }
       }
       return res;
@@ -142,7 +166,7 @@ export default {
         let start = 0;
         for (let i = 1; i <= maxPice; i++) {
           let end = pice * i;
-          while (query[end] != ";" && query[end - 1] != ";") {
+          while (query[end] != "]" && query[end - 1] != "]") {
             end--;
           }
           allResult = allResult + (await this.sendApi(query.slice(start, end)));
@@ -156,7 +180,7 @@ export default {
     },
     // 还原成英文
     restore(transResultStr, jsonObj, isObj) {
-      this.transResult = transResultStr.split(";;");
+      this.transResult = transResultStr.split("]]");
       setTimeout(() => {
         let result = this.flat1(jsonObj);
         if (isObj) {
@@ -177,7 +201,7 @@ export default {
         appid: appid,
         salt: salt,
         from: "zh",
-        to: "en",
+        to: this.languages,
         sign: md5(str1),
       };
       return transtoEn(params).then((res) => {
@@ -393,8 +417,12 @@ button {
 button:active {
   background-color: #125af7;
 }
-.eg{
+.eg {
   margin-top: 10px;
   text-align: left;
+}
+.langs{
+  width: 100px;
+  margin: 20px;
 }
 </style>
