@@ -89,7 +89,7 @@ export default {
         } else {
           let tmp = isArray ? key + "[" + k + "]" : key + k;
           res[tmp] = v;
-          this.str = this.str + v + "]]";
+          this.str = this.str + v + ";;";
         }
       }
       return res;
@@ -180,7 +180,7 @@ export default {
     },
     // 还原成英文
     restore(transResultStr, jsonObj, isObj) {
-      this.transResult = transResultStr.split("]]");
+      this.transResult = transResultStr.split(";;");
       setTimeout(() => {
         let result = this.flat1(jsonObj);
         if (isObj) {
