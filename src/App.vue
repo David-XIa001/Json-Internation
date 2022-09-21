@@ -95,11 +95,11 @@ export default {
       return res;
     },
     // 重新给对象赋翻译后的值
-    flat1(obj, res = {}) {
+    transform(obj, res = {}) {
       for (let [k, v] of Object.entries(obj)) {
         if (typeof v === "object") {
           res[k] = {};
-          this.flat1(v, res[k]);
+          this.transform(v, res[k]);
         } else {
           res[k] = this.transResult[this.index]?.trim();
           this.index++;
@@ -182,7 +182,7 @@ export default {
     restore(transResultStr, jsonObj, isObj) {
       this.transResult = transResultStr.split(";;");
       setTimeout(() => {
-        let result = this.flat1(jsonObj);
+        let result = this.transform(jsonObj);
         if (isObj) {
           this.result = JSON.stringify(result, null, "\t");
         } else {
@@ -235,130 +235,6 @@ export default {
 </script>
 
 <style>
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-b,
-u,
-i,
-center,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-canvas,
-details,
-embed,
-figure,
-figcaption,
-footer,
-header,
-hgroup,
-menu,
-nav,
-output,
-ruby,
-section,
-summary,
-time,
-mark,
-audio,
-video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section {
-  display: block;
-}
-body {
-  line-height: 1;
-}
-ol,
-ul {
-  list-style: none;
-}
-blockquote,
-q {
-  quotes: none;
-}
-blockquote:before,
-blockquote:after,
-q:before,
-q:after {
-  content: "";
-  content: none;
-}
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
 .title {
   position: absolute;
   top: 20px;
