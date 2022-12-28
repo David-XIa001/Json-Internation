@@ -89,7 +89,7 @@ export default {
         } else {
           let tmp = isArray ? key + "[" + k + "]" : key + k;
           res[tmp] = v;
-          this.str = this.str + v + " \n";
+          this.str = this.str + v + "\n";
         }
       }
       return res;
@@ -166,7 +166,7 @@ export default {
         let start = 0;
         for (let i = 1; i <= maxPice; i++) {
           let end = pice * i;
-          while (query[end] != "]" && query[end - 1] != "]") {
+          while (query[end] != "\n" && end > start) {
             end--;
           }
           allResult = allResult.concat( (await this.sendApi(query.slice(start, end))));
