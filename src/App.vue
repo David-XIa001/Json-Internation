@@ -89,7 +89,7 @@ export default {
         } else {
           let tmp = isArray ? key + "[" + k + "]" : key + k;
           res[tmp] = v;
-          this.str = this.str + v + ";;";
+          this.str = this.str + v + " \n";
         }
       }
       return res;
@@ -101,7 +101,7 @@ export default {
           res[k] = {};
           this.transform(v, res[k]);
         } else {
-          res[k] = this.transResult[this.index]?.trim();
+          res[k] = this.transResult[this.index]?.dst?.trim();
           this.index++;
         }
       }
@@ -158,7 +158,7 @@ export default {
       this.flat(jsonObj);
       // 要翻译的字符串
       let query = this.str.substr(0, this.str.length);
-      let allResult = "";
+      let allResult = [];
       const pice = 1000; //分片长度
       // 超过长度进行分片处理
       if (query.length > pice) {
@@ -169,7 +169,7 @@ export default {
           while (query[end] != "]" && query[end - 1] != "]") {
             end--;
           }
-          allResult = allResult + (await this.sendApi(query.slice(start, end)));
+          allResult = allResult.concat( (await this.sendApi(query.slice(start, end))));
           start = end;
         }
         this.restore(allResult, jsonObj, isObj);
@@ -179,8 +179,8 @@ export default {
       }
     },
     // 还原成英文
-    restore(transResultStr, jsonObj, isObj) {
-      this.transResult = transResultStr.split(";;");
+    restore(transResultArr, jsonObj, isObj) {
+      this.transResult = transResultArr
       setTimeout(() => {
         let result = this.transform(jsonObj);
         if (isObj) {
@@ -205,7 +205,7 @@ export default {
         sign: md5(str1),
       };
       return transtoEn(params).then((res) => {
-        return res.trans_result[0].dst;
+        return res.trans_result;
       });
     },
     handle() {
