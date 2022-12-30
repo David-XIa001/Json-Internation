@@ -179,15 +179,11 @@ export default {
       }
     },
     // 还原成英文
-    restore(transResultArr, jsonObj, isObj) {
+    restore(transResultArr, jsonObj) {
       this.transResult = transResultArr
       setTimeout(() => {
         let result = this.transform(jsonObj);
-        if (isObj) {
-          this.result = JSON.stringify(result, null, "\t");
-        } else {
-          this.result = JSON.stringify(result, null, "\t");
-        }
+        this.result = JSON.stringify(result, null, "\t");
       }, 0);
     },
     // 调api
